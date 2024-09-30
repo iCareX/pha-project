@@ -10,18 +10,15 @@ import {
   Text,
   TextInput,
   Tooltip,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { IconBook, IconSend, IconSwipe } from "@tabler/icons-react";
 import { useState } from "react";
 import { QuerySearchAPI } from "../../apis/query_searchAPI";
 
-// <span key={index}>
-//   {part}
-//   <br />
-//   <br />
-// </span>
-
 export default function QuerySearch() {
+  const { setColorScheme, colorScheme } = useMantineColorScheme();
+
   const [query, setQuery] = useState("");
   const [result, setResult] = useState({});
   const [loading, setLoading] = useState(false);
@@ -137,8 +134,7 @@ export default function QuerySearch() {
                       radius={"sm"}
                       shadow="sm"
                       withBorder
-                      h={"fit-content"}
-                      bg={"#d1d1d1"}
+                      bg={colorScheme === "light" ? "#d1d1d1" : "#333131"}
                     >
                       <Flex
                         direction={"column"}
