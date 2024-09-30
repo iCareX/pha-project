@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 const userTokenState = atom({
   key: "user-token",
-  default: JSON.parse(localStorage.getItem("mygen_auth")) || "",
+  default: localStorage.getItem("authToken") || "",
 });
 
 export { userTokenState };

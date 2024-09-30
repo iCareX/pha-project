@@ -16,17 +16,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DarkSwitch from "../switch/DarkSwitch";
 import { useRecoilValue } from "recoil";
-import { userTokenState } from "../atoms/userAtoms";
+import { userTokenState } from "../atoms/tokenAtoms";
+import { userInfoState } from "../atoms/userInfoAtoms";
+import { toast } from "react-toastify";
 
 export default function MainHeader() {
   const { colorScheme } = useMantineColorScheme();
   const userToken = useRecoilValue(userTokenState);
+  const userInfo = useRecoilValue(userInfoState);
 
   const [opened, { open, close }] = useDisclosure(false);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-
-  const [user, setUser] = useState();
 
   const [navList, setNavList] = useState([
     {
@@ -57,20 +58,37 @@ export default function MainHeader() {
   ]);
 
   const handleSignOut = () => {
-    localStorage.removeItem("mygen_auth");
+    toast.success("Logged out successfully");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userinfo");
+    localStorage.removeItem("tokenExpiration");
     navigate("/login");
-    console.log("--");
   };
 
-  // useEffect(() => {
-  //   if (!userToken) {
-  //     navigate("/login");
-  //   }
-  // }, []);
+  const isAuthenticated = () => {
+    const token = localStorage.getItem("authToken");
+    const expirationTime = localStorage.getItem("tokenExpiration");
+
+    if (!token || !expirationTime) {
+      return false;
+    }
+
+    const currentTime = new Date().getTime();
+    if (currentTime > expirationTime) {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userinfo");
+      localStorage.removeItem("tokenExpiration");
+      return false;
+    }
+
+    return true;
+  };
 
   useEffect(() => {
-    navigate("/query");
-  }, []);
+    if (!userToken || !isAuthenticated()) {
+      navigate("/login");
+    }
+  }, [userToken, userInfo, navigate]);
 
   return (
     <header className=" border-b-[1px]">
@@ -112,14 +130,14 @@ export default function MainHeader() {
                 gap={"sm"}
                 className="hover:cursor-pointer"
               >
-                <Text>{userToken.name}</Text>
+                <Text>{userInfo.name}</Text>
                 <Avatar src={""} size={"md"} radius={"xl"} />
               </Flex>
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item leftSection={<Avatar radius={"md"} src={""} />}>
                 <Box>
-                  <Text fw={600}>{userToken?.name}</Text>
+                  <Text fw={600}>{userInfo?.name}</Text>
                   {/* <Text color="gray" fw={500} size="xs">
                     acedev0427@gmail.com
                   </Text> */}
