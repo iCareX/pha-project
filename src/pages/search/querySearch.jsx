@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   List,
   ListItem,
@@ -98,6 +99,15 @@ export default function QuerySearch() {
         //   // style={{ height: "calc(100% - 62px)" }}
         // >
         <div className="p-[28px]">
+          <Flex justify={"end"}>
+            <Button
+              onClick={() => setResult({})}
+              variant="outline"
+              color="gray"
+            >
+              Refresh
+            </Button>
+          </Flex>
           <Box>
             <Text size="xl" fw={700}>
               Search Result for
@@ -123,7 +133,10 @@ export default function QuerySearch() {
             <Text size="lg" fw={500} mt={"md"}>
               Sources:
             </Text>
-            <SimpleGrid cols={{ base: 1, md: 2 }} mt={"xs"}>
+            <SimpleGrid
+              cols={{ base: 1, md: result.sources.length < 2 ? 1 : 2 }}
+              mt={"xs"}
+            >
               {result.sources &&
                 result.sources.length > 0 &&
                 result.sources.map((item, index) => {
