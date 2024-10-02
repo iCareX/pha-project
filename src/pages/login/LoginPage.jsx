@@ -67,7 +67,9 @@ export default function LoginPage() {
     setInfo({ name, password });
 
     toast.success("Login Successful!");
-    navigate("/query");
+    setTimeout(() => {
+      navigate("/query");
+    }, 2000);
   };
 
   return (
