@@ -62,7 +62,9 @@ export default function MainHeader() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userinfo");
     localStorage.removeItem("tokenExpiration");
-    navigate("/login");
+    setTimeout(() => {
+      navigate("/login");
+    }, 1000);
   };
 
   const isAuthenticated = () => {
