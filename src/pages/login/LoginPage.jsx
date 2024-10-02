@@ -83,7 +83,7 @@ export default function LoginPage() {
           shadow="sm"
         >
           <Title order={2} ta="center" mb={50} className={classes.title}>
-            Welcome to
+            Welcome To BioOn Search
           </Title>
 
           <TextInput
